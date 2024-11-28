@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Recommender</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        h1 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #recommendationForm {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #recommendations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .recommendation-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Book Recommendation System</h1>
+    <form id="recommendationForm" class="text-center">
+        <div class="mb-3">
+            <label for="book_name" class="form-label">Enter a Book Title:</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-book"></i></span>
+                <input type="text" id="book_name" name="book_name" class="form-control" placeholder="E.g., The Great Gatsby" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Get Recommendations</button>
+    </form>
+    <h2 class="text-center mt-5">Recommendations:</h2>
+    <div id="recommendations"></div>
+
+    <script>
+        document.getElementById('recommendationForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const bookName = document.getElementById('book_name').value;
+            const recommendationsList = document.getElementById('recommendations');
+            recommendationsList.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+            
+            try {
+                const response = await fetch('/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `book_name=${encodeURIComponent(bookName)}`
+                });
+                const recommendations = await response.json();
+                recommendationsList.innerHTML = '';
+                recommendations.forEach(book => {
+                    const card = document.createElement('div');
+                    card.className = 'recommendation-card';
+                    card.textContent = book;
+                    recommendationsList.appendChild(card);
+                });
+            } catch (error) {
+                recommendationsList.innerHTML = '<p class="text-danger">Error fetching recommendations. Please try again later.</p>';
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
