@@ -117,7 +117,7 @@ The `test_requirements.py` script ensures that all necessary libraries are insta
 ---
 
 ### **License**  
-This project is licensed under the MIT License.  LICENSE
+This project is licensed under the MIT License.  See the [LICENSE](LICENSE) file for details.
 
 ---
 
