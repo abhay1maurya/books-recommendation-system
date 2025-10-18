@@ -126,4 +126,3 @@ Contributions are welcome! Fork the repository, make your changes, and submit a 
 
 ---
 
-Let me know if you'd like further adjustments!
